@@ -30,6 +30,11 @@ export class TimesheetPaginationQueryDto {
   @Min(1)
   @Max(100)
   size: number = 10;
+
+  @ApiProperty({ required: false, example: 'John', description: 'Filter by user name' })
+  @IsOptional()
+  @IsString()
+  name?: string;
 }
 
 export class TimesheetPhotoQueryDto {

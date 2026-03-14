@@ -6,7 +6,7 @@ import {
   BadRequestException,
   ForbiddenException
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Timesheet } from '@/models/timesheet.entity';
 import { CreateTimesheetDto, TimesheetPaginationQueryDto } from './timesheets.dto';
 import { getDefaultValueByCondition } from '@/common/helpers/helper';
@@ -56,8 +56,11 @@ export class TimesheetsService {
     const page = query.page;
     const size = query.size;
     const skip = (page - 1) * size;
+    const trimmedName = query.name?.trim();
+    const whereCondition = trimmedName ? { user: { name: Like(`%${trimmedName}%`) } } : undefined;
 
     const [timesheets, total] = await this.timesheetRepository.findAndCount({
+      where: whereCondition,
       relations: { user: true },
       order: { workDate: 'DESC' },
       skip,

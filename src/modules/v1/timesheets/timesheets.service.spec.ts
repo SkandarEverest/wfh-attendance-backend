@@ -97,6 +97,22 @@ describe('TimesheetsService', () => {
       expect(result.page).toBe(1);
       expect(result.size).toBe(10);
     });
+
+    it('should filter timesheets by user name', async () => {
+      const timesheets = [Object.assign(new Timesheet(), { id: 1, userId: 1, workDate: '2024-06-15' })];
+      const query = { page: 1, size: 10, name: 'Admin' };
+
+      jest.spyOn(mockTimesheetRepository, 'findAndCount').mockResolvedValue([timesheets, timesheets.length]);
+
+      const result = await service.getAllTimesheets(query);
+
+      expect(mockTimesheetRepository.findAndCount).toHaveBeenCalled();
+      const options = (mockTimesheetRepository.findAndCount as jest.Mock).mock.calls[0][0];
+      expect(options.where.user.name).toMatchObject({ _type: 'like', _value: '%Admin%' });
+      expect(result.status).toBe(200);
+      expect(result.data).toEqual(timesheets);
+      expect(result.total).toBe(1);
+    });
   });
 
   describe('checkIn', () => {
