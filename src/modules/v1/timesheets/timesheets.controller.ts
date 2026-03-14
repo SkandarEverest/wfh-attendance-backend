@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Query,
+  BadRequestException,
   HttpException,
   Header,
   Res,
@@ -111,6 +112,12 @@ export class TimesheetsController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('photo', {
+      fileFilter: (_req, file, cb) => {
+        if (!file.mimetype?.startsWith('image/')) {
+          return cb(new BadRequestException('Only image files are allowed.'), false);
+        }
+        cb(null, true);
+      },
       storage: diskStorage({
         destination: (_req, _file, cb) => cb(null, appConfig.uploadDir),
         filename: (_req, file, cb) => {
