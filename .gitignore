@@ -10,7 +10,7 @@
 
 .env
 .env.*
-!.env.testing
+!.env.example
 
 # Misc
 *.zip
