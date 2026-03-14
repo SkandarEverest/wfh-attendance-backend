@@ -46,6 +46,7 @@ describe('TimesheetsService', () => {
     email: 'admin@wfh.local',
     roleId: 1,
     roleName: 'Admin',
+    isSpecial: true,
     modules: []
   };
 
@@ -55,6 +56,7 @@ describe('TimesheetsService', () => {
     email: 'emp@wfh.local',
     roleId: 2,
     roleName: 'Employee',
+    isSpecial: false,
     modules: []
   };
 
@@ -143,7 +145,7 @@ describe('TimesheetsService', () => {
   });
 
   describe('getTimesheetById', () => {
-    it('should return timesheet by id (Admin)', async () => {
+    it('should return timesheet by id (special user)', async () => {
       const timesheet = Object.assign(new Timesheet(), { id: 1, userId: 2, workDate: '2024-06-15' });
 
       jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);
@@ -155,7 +157,7 @@ describe('TimesheetsService', () => {
       expect(result.data).toEqual(timesheet);
     });
 
-    it('should filter by userId for non-Admin', async () => {
+    it('should filter by userId for non-special user', async () => {
       const timesheet = Object.assign(new Timesheet(), { id: 1, userId: 2, workDate: '2024-06-15' });
 
       jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);

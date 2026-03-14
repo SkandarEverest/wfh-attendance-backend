@@ -69,6 +69,7 @@ export class AuthService {
       email: user.email,
       roleId: user.roleId,
       roleName: user.role?.name ?? '',
+      isSpecial: Boolean(user.role?.isSpecial),
       modules,
     };
 
@@ -128,6 +129,7 @@ export class AuthService {
       email: user.email,
       roleId: user.roleId,
       roleName: user.role?.name ?? '',
+      isSpecial: Boolean(user.role?.isSpecial),
       modules,
     };
 

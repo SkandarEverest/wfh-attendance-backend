@@ -120,7 +120,7 @@ export class TimesheetsService {
     };
 
     const whereCondition: any = { id };
-    if (userInfo.roleName !== 'Admin') {
+    if (!userInfo.isSpecial) {
       whereCondition.userId = userInfo.id;
     }
 

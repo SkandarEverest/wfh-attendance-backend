@@ -55,6 +55,7 @@ describe('TimesheetsController', () => {
     email: 'admin@wfh.local',
     roleId: 1,
     roleName: 'Admin',
+    isSpecial: false,
     modules: []
   };
 

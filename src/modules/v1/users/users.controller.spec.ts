@@ -56,6 +56,7 @@ describe('UsersController', () => {
     email: 'admin@wfh.local',
     roleId: 1,
     roleName: 'Admin',
+    isSpecial: false,
     modules: []
   };
 

@@ -67,6 +67,7 @@ describe('AuthController', () => {
           email: 'admin@wfh.local',
           roleId: 1,
           roleName: 'Admin',
+          isSpecial: true,
           modules: [],
           token: 'jwt-token'
         }
@@ -139,6 +140,7 @@ describe('AuthController', () => {
           email: 'admin@wfh.local',
           roleId: 1,
           roleName: 'Admin',
+          isSpecial: true,
           modules: []
         }
       };

@@ -73,6 +73,7 @@ describe('AuthService', () => {
     const role = Object.assign(new Role(), {
       id: 1,
       name: 'Admin',
+      isSpecial: true,
       status: true,
       deletedAt: null
     });
@@ -118,6 +119,7 @@ describe('AuthService', () => {
         email: 'admin@wfh.local',
         roleId: 1,
         roleName: 'Admin',
+        isSpecial: true,
         modules: [
           {
             moduleId: 1,
@@ -155,6 +157,7 @@ describe('AuthService', () => {
         email: 'admin@wfh.local',
         roleId: 1,
         roleName: 'Admin',
+        isSpecial: false,
         modules: []
       };
 
@@ -181,6 +184,7 @@ describe('AuthService', () => {
         email: 'admin@wfh.local',
         roleId: 1,
         roleName: 'Admin',
+        isSpecial: false,
         modules: []
       };
 
@@ -197,6 +201,7 @@ describe('AuthService', () => {
         email: 'admin@wfh.local',
         roleId: 1,
         roleName: 'Admin',
+        isSpecial: false,
         modules: []
       };
 
@@ -217,7 +222,8 @@ describe('AuthService', () => {
   describe('getProfile', () => {
     const role = Object.assign(new Role(), {
       id: 1,
-      name: 'Admin'
+      name: 'Admin',
+      isSpecial: true
     });
 
     const user = Object.assign(new User(), {
@@ -254,6 +260,7 @@ describe('AuthService', () => {
         email: 'admin@wfh.local',
         roleId: 1,
         roleName: 'Admin',
+        isSpecial: true,
         modules: [
           {
             moduleId: 2,

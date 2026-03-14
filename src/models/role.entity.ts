@@ -14,6 +14,16 @@ export class Role extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   status: boolean;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+    transformer: {
+      to: (value: boolean) => value,
+      from: (value: boolean | number) => Boolean(value)
+    }
+  })
+  isSpecial: boolean;
+
   @Column({ nullable: true, type: 'varchar' })
   deletedBy: string | null;
 

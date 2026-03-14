@@ -13,8 +13,8 @@ export default class RoleSeeder extends Seeder {
     };
 
     const seedsData: Partial<Role>[] = [
-      { name: 'Admin', ...baseMeta },
-      { name: 'Employee', ...baseMeta }
+      { name: 'Admin', isSpecial: true, ...baseMeta },
+      { name: 'Employee', isSpecial: false, ...baseMeta }
     ];
 
     const seeds = seedsData.map((seed) => dataSource.createEntityManager().create(Role, seed));
