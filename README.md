@@ -57,15 +57,15 @@ npm run start:dev
 
 Default API base URL:
 
-- `http://localhost:3000/api`
-- Versioned routes: `http://localhost:3000/api/v1/...`
+- `http://localhost:7777/api`
+- Versioned routes: `http://localhost:7777/api/v1/...`
 
 ## Environment Variables
 
 | Variable | Description | Default |
 | --- | --- | --- |
 | `NODE_ENV` | Runtime environment | `development` |
-| `PORT` | App port | `3000` |
+| `PORT` | App port | `7777` |
 | `API_PREFIX` | Global API prefix | `api` |
 | `DB_HOST` | MySQL host | `localhost` |
 | `DB_PORT` | MySQL port | `3306` |
@@ -152,7 +152,7 @@ Pagination query:
 
 Swagger is enabled only when `NODE_ENV` is not `production`:
 
-- `http://localhost:3000/api/documentation`
+- `http://localhost:7777/api/documentation`
 
 ## Project Structure
 
