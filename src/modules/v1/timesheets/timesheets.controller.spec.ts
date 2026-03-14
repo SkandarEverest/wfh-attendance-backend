@@ -11,8 +11,7 @@ describe('TimesheetsController', () => {
   const mockTimesheetsService = {
     getAllTimesheets: jest.fn(),
     getTimesheetsByUser: jest.fn(),
-    getTimesheetById: jest.fn(),
-    getTimesheetPhotoPath: jest.fn(),
+    getTimesheetPhotoPathByPath: jest.fn(),
     checkIn: jest.fn()
   };
 
@@ -121,51 +120,27 @@ describe('TimesheetsController', () => {
     });
   });
 
-  describe('getTimesheetPhoto', () => {
-    it('should send timesheet photo file', async () => {
+  describe('getTimesheetPhotoByPath', () => {
+    it('should send timesheet photo file by path', async () => {
       const response = { sendFile: jest.fn() } as any;
+      const query = { path: 'uploads/photo.jpg' };
 
-      jest.spyOn(mockTimesheetsService, 'getTimesheetPhotoPath').mockResolvedValue('/tmp/photo.jpg');
+      jest.spyOn(mockTimesheetsService, 'getTimesheetPhotoPathByPath').mockResolvedValue('/tmp/photo.jpg');
 
-      await controller.getTimesheetPhoto(1, userInfo, response);
+      await controller.getTimesheetPhotoByPath(query, userInfo, response);
 
-      expect(mockTimesheetsService.getTimesheetPhotoPath).toHaveBeenCalledWith(1, userInfo);
+      expect(mockTimesheetsService.getTimesheetPhotoPathByPath).toHaveBeenCalledWith(query.path, userInfo);
       expect(response.sendFile).toHaveBeenCalledWith('/tmp/photo.jpg');
     });
 
     it('should throw error response', async () => {
-      jest.spyOn(mockTimesheetsService, 'getTimesheetPhotoPath').mockImplementation(() => {
+      const query = { path: 'uploads/photo.jpg' };
+
+      jest.spyOn(mockTimesheetsService, 'getTimesheetPhotoPathByPath').mockImplementation(() => {
         throw new Error('error');
       });
 
-      await expect(controller.getTimesheetPhoto(1, userInfo, { sendFile: jest.fn() } as any)).rejects.toEqual(
-        new HttpException({ status: 500, error: Error('error') }, 500, { cause: 'error' })
-      );
-    });
-  });
-
-  describe('getTimesheetById', () => {
-    it('should return successful response', async () => {
-      const response = {
-        message: 'Data successfully retrieved.',
-        status: 200,
-        data: { id: 1, userId: 1 }
-      };
-
-      jest.spyOn(mockTimesheetsService, 'getTimesheetById').mockReturnValue(response);
-
-      const result = await controller.getTimesheetById(1, userInfo);
-
-      expect(mockTimesheetsService.getTimesheetById).toHaveBeenCalledWith(1, userInfo);
-      expect(result).toEqual({ success: true, ...response });
-    });
-
-    it('should throw error response', async () => {
-      jest.spyOn(mockTimesheetsService, 'getTimesheetById').mockImplementation(() => {
-        throw new Error('error');
-      });
-
-      await expect(controller.getTimesheetById(999, userInfo)).rejects.toEqual(
+      await expect(controller.getTimesheetPhotoByPath(query, userInfo, { sendFile: jest.fn() } as any)).rejects.toEqual(
         new HttpException({ status: 500, error: Error('error') }, 500, { cause: 'error' })
       );
     });

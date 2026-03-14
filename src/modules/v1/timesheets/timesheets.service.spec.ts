@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TimesheetsService } from '@/modules/v1/timesheets/timesheets.service';
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Timesheet } from '@/models/timesheet.entity';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -144,45 +144,10 @@ describe('TimesheetsService', () => {
     });
   });
 
-  describe('getTimesheetById', () => {
-    it('should return timesheet by id (special user)', async () => {
-      const timesheet = Object.assign(new Timesheet(), { id: 1, userId: 2, workDate: '2024-06-15' });
-
-      jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);
-
-      const result = await service.getTimesheetById(1, userInfo);
-
-      expect(mockTimesheetRepository.findOne).toHaveBeenCalledWith(expect.objectContaining({ where: { id: 1 } }));
-      expect(result.status).toBe(200);
-      expect(result.data).toEqual(timesheet);
-    });
-
-    it('should filter by userId for non-special user', async () => {
-      const timesheet = Object.assign(new Timesheet(), { id: 1, userId: 2, workDate: '2024-06-15' });
-
-      jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);
-
-      const result = await service.getTimesheetById(1, employeeInfo);
-
-      expect(mockTimesheetRepository.findOne).toHaveBeenCalledWith(
-        expect.objectContaining({ where: { id: 1, userId: 2 } })
-      );
-      expect(result.status).toBe(200);
-    });
-
-    it('should throw NotFoundException when timesheet not found', async () => {
-      jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(null);
-
-      await expect(service.getTimesheetById(999, userInfo)).rejects.toEqual(
-        new NotFoundException('Timesheet not found.')
-      );
-    });
-  });
-
-  describe('getTimesheetPhotoPath', () => {
-    it('should return absolute photo path', async () => {
+  describe('getTimesheetPhotoPathByPath', () => {
+    it('should return absolute photo path for special user', async () => {
       const uploadDir = path.resolve('uploads');
-      const filePath = path.resolve(uploadDir, 'photo.jpg');
+      const filePath = path.resolve(uploadDir, 'photo-special.jpg');
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
@@ -190,16 +155,69 @@ describe('TimesheetsService', () => {
 
       const timesheet = Object.assign(new Timesheet(), {
         id: 1,
-        userId: 1,
-        photoPath: 'uploads/photo.jpg'
+        userId: 2,
+        photoPath: 'uploads/photo-special.jpg'
       });
-
       jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);
 
-      const result = await service.getTimesheetPhotoPath(1, userInfo);
+      const result = await service.getTimesheetPhotoPathByPath('uploads/photo-special.jpg', userInfo);
 
+      expect(mockTimesheetRepository.findOne).toHaveBeenCalledWith(
+        expect.objectContaining({ where: { photoPath: 'uploads/photo-special.jpg' } })
+      );
       expect(result).toEqual(filePath);
       fs.unlinkSync(filePath);
+    });
+
+    it('should filter by userId for non-special user', async () => {
+      const uploadDir = path.resolve('uploads');
+      const filePath = path.resolve(uploadDir, 'photo-employee.jpg');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      fs.writeFileSync(filePath, 'test');
+
+      const timesheet = Object.assign(new Timesheet(), {
+        id: 2,
+        userId: 2,
+        photoPath: 'uploads/photo-employee.jpg'
+      });
+      jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);
+
+      const result = await service.getTimesheetPhotoPathByPath('uploads/photo-employee.jpg', employeeInfo);
+
+      expect(mockTimesheetRepository.findOne).toHaveBeenCalledWith(
+        expect.objectContaining({ where: { photoPath: 'uploads/photo-employee.jpg', userId: 2 } })
+      );
+      expect(result).toEqual(filePath);
+      fs.unlinkSync(filePath);
+    });
+
+    it('should throw BadRequestException when photo path is empty', async () => {
+      await expect(service.getTimesheetPhotoPathByPath('', userInfo)).rejects.toEqual(
+        new BadRequestException('Photo path is required.')
+      );
+    });
+
+    it('should throw NotFoundException when timesheet not found', async () => {
+      jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(null);
+
+      await expect(service.getTimesheetPhotoPathByPath('uploads/missing.jpg', employeeInfo)).rejects.toEqual(
+        new NotFoundException('Timesheet not found.')
+      );
+    });
+
+    it('should throw ForbiddenException for invalid resolved path', async () => {
+      const timesheet = Object.assign(new Timesheet(), {
+        id: 3,
+        userId: 2,
+        photoPath: '../outside.jpg'
+      });
+      jest.spyOn(mockTimesheetRepository, 'findOne').mockResolvedValue(timesheet);
+
+      await expect(service.getTimesheetPhotoPathByPath('../outside.jpg', userInfo)).rejects.toEqual(
+        new ForbiddenException('Access denied to photo path.')
+      );
     });
   });
 });

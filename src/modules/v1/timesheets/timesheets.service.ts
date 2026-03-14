@@ -113,19 +113,17 @@ export class TimesheetsService {
     return serviceResponse;
   }
 
-  async getTimesheetById(id: number, userInfo: UserInfo): Promise<ServiceResponse<Timesheet>> {
-    const serviceResponse: ServiceResponse<Timesheet> = {
-      message: 'Data successfully retrieved.',
-      status: 200
-    };
+  async getTimesheetPhotoPathByPath(photoPath: string, userInfo: UserInfo): Promise<string> {
+    if (!photoPath) {
+      throw new BadRequestException('Photo path is required.');
+    }
 
-    const whereCondition: any = { id };
+    const whereCondition: Record<string, unknown> = { photoPath };
     if (!userInfo.isSpecial) {
       whereCondition.userId = userInfo.id;
     }
 
     const timesheet = await this.timesheetRepository.findOne({
-      relations: { user: true },
       where: whereCondition
     });
 
@@ -133,15 +131,12 @@ export class TimesheetsService {
       throw new NotFoundException('Timesheet not found.');
     }
 
-    serviceResponse.data = timesheet;
-
-    return serviceResponse;
+    return this.resolveAndValidatePhotoPath(timesheet.photoPath);
   }
 
-  async getTimesheetPhotoPath(id: number, userInfo: UserInfo): Promise<string> {
-    const timesheet = (await this.getTimesheetById(id, userInfo)).data as Timesheet;
+  private resolveAndValidatePhotoPath(photoPath: string): string {
     const absoluteUploadDir = path.resolve(appConfig.uploadDir);
-    const absolutePhotoPath = path.resolve(timesheet.photoPath);
+    const absolutePhotoPath = path.resolve(photoPath);
 
     if (!absolutePhotoPath.startsWith(absoluteUploadDir + path.sep)) {
       throw new ForbiddenException('Access denied to photo path.');

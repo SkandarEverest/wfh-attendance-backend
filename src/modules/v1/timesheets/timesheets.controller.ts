@@ -3,12 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Param,
   Query,
   HttpException,
   Header,
   Res,
-  ParseIntPipe,
   UseInterceptors,
   UploadedFile,
   UseGuards
@@ -18,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { TimesheetsService } from './timesheets.service';
-import { CreateTimesheetDto, TimesheetPaginationQueryDto } from './timesheets.dto';
+import { CreateTimesheetDto, TimesheetPaginationQueryDto, TimesheetPhotoQueryDto } from './timesheets.dto';
 import { User } from '@/common/decorators/user.decorator';
 import { Timesheet } from '@/models/timesheet.entity';
 import { getStatusCode } from '@/common/helpers/parser';
@@ -83,40 +81,16 @@ export class TimesheetsController {
     }
   }
 
-  @Get(':id/photo')
+  @Get('photo')
   @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, 'timesheets'))
-  async getTimesheetPhoto(
-    @Param('id', ParseIntPipe) id: number,
+  async getTimesheetPhotoByPath(
+    @Query() query: TimesheetPhotoQueryDto,
     @User() userInfo: UserInfo,
     @Res() response: Response
   ): Promise<void> {
     try {
-      const absolutePhotoPath = await this.service.getTimesheetPhotoPath(id, userInfo);
+      const absolutePhotoPath = await this.service.getTimesheetPhotoPathByPath(query.path, userInfo);
       response.sendFile(absolutePhotoPath);
-    } catch (error: any) {
-      throw new HttpException(
-        {
-          status: getStatusCode(error),
-          error: error
-        },
-        getStatusCode(error),
-        {
-          cause: error.message
-        }
-      );
-    }
-  }
-
-  @Get(':id')
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, 'timesheets'))
-  async getTimesheetById(@Param('id', ParseIntPipe) id: number, @User() userInfo: UserInfo): Promise<GenericResponse> {
-    try {
-      const serviceResponse: ServiceResponse<Timesheet> = await this.service.getTimesheetById(id, userInfo);
-      const result: GenericResponse = {
-        success: serviceResponse.status == 200,
-        ...serviceResponse
-      };
-      return result;
     } catch (error: any) {
       throw new HttpException(
         {

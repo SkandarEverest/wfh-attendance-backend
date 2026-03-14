@@ -31,3 +31,10 @@ export class TimesheetPaginationQueryDto {
   @Max(100)
   size: number = 10;
 }
+
+export class TimesheetPhotoQueryDto {
+  @ApiProperty({ example: 'uploads/checkin-1735365512536-18438698.jpg', description: 'Photo path from timesheet data' })
+  @IsNotEmpty()
+  @IsString()
+  path: string;
+}
