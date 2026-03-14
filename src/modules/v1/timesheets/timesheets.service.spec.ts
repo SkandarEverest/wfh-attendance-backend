@@ -116,7 +116,7 @@ describe('TimesheetsService', () => {
   });
 
   describe('checkIn', () => {
-    const payload = { workDate: '2024-06-15' };
+    const payload = { workDate: '2024-06-15', notes: 'WFH check-in' };
 
     const mockPhoto = {
       filename: 'checkin-123.jpg',
@@ -130,7 +130,8 @@ describe('TimesheetsService', () => {
         id: 1,
         userId: 1,
         workDate: '2024-06-15',
-        photoPath: 'uploads/checkin-123.jpg'
+        photoPath: 'uploads/checkin-123.jpg',
+        notes: 'WFH check-in'
       });
       jest.spyOn(mockTimesheetRepository, 'save').mockResolvedValue(savedTimesheet);
 

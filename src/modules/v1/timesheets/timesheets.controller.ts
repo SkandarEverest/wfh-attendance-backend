@@ -8,6 +8,7 @@ import {
   HttpException,
   Header,
   Res,
+  ParseFilePipe,
   UseInterceptors,
   UploadedFile,
   UseGuards
@@ -133,7 +134,12 @@ export class TimesheetsController {
   )
   async checkIn(
     @Body() payload: CreateTimesheetDto,
-    @UploadedFile() photo: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        fileIsRequired: true
+      })
+    )
+    photo: Express.Multer.File,
     @User() userInfo: UserInfo
   ): Promise<GenericResponse> {
     try {

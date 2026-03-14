@@ -9,7 +9,6 @@ import {
 import { Like, Repository } from 'typeorm';
 import { Timesheet } from '@/models/timesheet.entity';
 import { CreateTimesheetDto, TimesheetPaginationQueryDto } from './timesheets.dto';
-import { getDefaultValueByCondition } from '@/common/helpers/helper';
 import { appConfig } from '@/config/env/main.config';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -104,7 +103,7 @@ export class TimesheetsService {
     timesheet.workDate = payload.workDate;
     timesheet.checkInTime = new Date();
     timesheet.photoPath = photoPath;
-    timesheet.notes = getDefaultValueByCondition(payload.notes, payload.notes, null);
+    timesheet.notes = payload.notes;
     timesheet.createdBy = userInfo.email;
     timesheet.createdAt = new Date();
     timesheet.updatedBy = userInfo.email;

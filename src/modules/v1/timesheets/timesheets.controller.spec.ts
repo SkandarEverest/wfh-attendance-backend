@@ -156,7 +156,7 @@ describe('TimesheetsController', () => {
 
       jest.spyOn(mockTimesheetsService, 'checkIn').mockReturnValue(response);
 
-      const payload = { workDate: '2024-06-15' };
+      const payload = { workDate: '2024-06-15', notes: 'WFH check-in' };
       const photo = { filename: 'test.jpg' } as Express.Multer.File;
 
       const result = await controller.checkIn(payload, photo, userInfo);
@@ -170,7 +170,7 @@ describe('TimesheetsController', () => {
         throw new Error('error');
       });
 
-      const payload = { workDate: '2024-06-15' };
+      const payload = { workDate: '2024-06-15', notes: 'WFH check-in' };
       const photo = { filename: 'test.jpg' } as Express.Multer.File;
 
       await expect(controller.checkIn(payload, photo, userInfo)).rejects.toEqual(

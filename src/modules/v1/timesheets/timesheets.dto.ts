@@ -9,10 +9,10 @@ export class CreateTimesheetDto {
   @IsDateString()
   workDate: string;
 
-  @ApiProperty({ example: 'Working on feature X from home', required: false })
-  @IsOptional()
+  @ApiProperty({ example: 'Working on feature X from home' })
+  @IsNotEmpty()
   @IsString()
-  notes?: string;
+  notes: string;
 }
 
 export class TimesheetPaginationQueryDto {
