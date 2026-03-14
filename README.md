@@ -105,6 +105,7 @@ Optional variables used by admin seeder:
 
 ## Authentication Notes
 
+- Default seeded admin login: `admin@wfh.local` / `password`.
 - Login endpoint sets JWT in cookie: `access_token`.
 - Protected routes read token from cookie, not `Authorization` header.
 - Configure your client to send credentials (`withCredentials: true` for browser clients).
