@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerCustomOptions, SwaggerDocumentOptions, SwaggerM
 
 export default function initSwagger(app: NestExpressApplication) {
   const docOptions: SwaggerDocumentOptions = {
-    ignoreGlobalPrefix: true
+    ignoreGlobalPrefix: false
   };
   const options: SwaggerCustomOptions = {
     useGlobalPrefix: true,
