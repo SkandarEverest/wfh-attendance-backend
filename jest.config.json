@@ -1,0 +1,38 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "modulePaths": ["src"],
+  "rootDir": "src",
+  "transform": {
+    "^.+\\.(t|j)s$": ["ts-jest"]
+  },
+  "moduleDirectories": ["node_modules"],
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/$1"
+  },
+  "testRegex": ".*\\.spec\\.ts$",
+  "modulePathIgnorePatterns": [
+    "\\.module\\.ts$",
+    "\\.config\\.ts$",
+    "\\.repository\\.ts$",
+    "\\.entity\\.ts$",
+    "\\.controller\\.ts$",
+    "\\.interface\\.ts$",
+    "\\.dto\\.ts$",
+    "src/database/*",
+    "src/*\\.ts"
+  ],
+  "collectCoverageFrom": ["**/*.(t|j)s"],
+  "coveragePathIgnorePatterns": [
+    "\\.module\\.ts$",
+    "\\.config\\.ts$",
+    "\\.repository\\.ts$",
+    "\\.entity\\.ts$",
+    "\\.controller\\.ts$",
+    "\\.interface\\.ts$",
+    "\\.dto\\.ts$",
+    "src/database/*",
+    "src/*\\.ts"
+  ],
+  "coverageDirectory": "../coverage",
+  "testEnvironment": "node"
+}

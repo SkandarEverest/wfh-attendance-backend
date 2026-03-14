@@ -1,0 +1,63 @@
+# compiled output
+/dist
+/node_modules
+/public/storage
+/public/**
+!/public/favicon.svg
+!/public/readme-logo.svg
+!/public/index.html
+*sessions*
+
+.env
+.env.*
+!.env.testing
+
+# Misc
+*.zip
+test.js
+
+# Backup
+*.backup
+
+# PG Data
+pgdata
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+*.jtl
+
+# OS
+.DS_Store
+
+.clinic
+.stfolder
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Sync Thing
+.stignore
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+auth_info_baileys
