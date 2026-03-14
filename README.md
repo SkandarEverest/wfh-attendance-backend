@@ -82,13 +82,6 @@ Default API base URL:
 | `MAX_FILE_SIZE_MB` | Max upload file size | `5` |
 | `REQUEST_TIMEOUT` | Request timeout in ms | `30000` |
 
-Optional variables used by admin seeder:
-
-- `DEFAULT_ADMIN_EMAIL` (default: `admin@wfh.local`)
-- `DEFAULT_ADMIN_NAME` (default: `Administrator`)
-- `DEFAULT_ADMIN_PASSWORD` (default: `password`)
-- `REDIS_TLS=true` to enable Redis TLS mode
-
 ## Available Scripts
 
 - `npm run start` - start application
